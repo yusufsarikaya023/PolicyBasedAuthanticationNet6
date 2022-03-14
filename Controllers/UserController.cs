@@ -1,4 +1,5 @@
 using Jwt;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Repository;
@@ -15,6 +16,7 @@ public class UserController : ControllerBase
         _jwtSetting = jwtSetting;
     }
 
+    [AllowAnonymous]
     [HttpPost]
     public ActionResult<ResponseToken> Login(Login model)
     {
@@ -28,6 +30,9 @@ public class UserController : ControllerBase
         return Ok(responseToken);
     }
 
+
+    [Authorize(Policy = "Account")]
+    [Authorize(Policy = "Admin")]
     [HttpGet]
     public ActionResult<IEnumerable<User>> Get()
     {
